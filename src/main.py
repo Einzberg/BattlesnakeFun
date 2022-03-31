@@ -45,7 +45,7 @@ def handle_move():
 
     # TODO - look at the logic.py file to see how we decide what move to return!
     move = logic.choose_move(data)
-
+    print(data["turn"] + 1, "-------------------------------------------")
     return {"move": move}
 
 
