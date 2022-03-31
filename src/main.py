@@ -29,7 +29,9 @@ def handle_start():
     """
     data = request.get_json()
 
+    print('\n')
     print(f"{data['game']['id']} START")
+
     return "ok"
 
 
@@ -56,6 +58,7 @@ def handle_end():
     data = request.get_json()
 
     print(f"{data['game']['id']} END")
+    print('\n')
     return "ok"
 
 
