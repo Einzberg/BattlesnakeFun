@@ -165,6 +165,9 @@ def choose_move(data: dict) -> str:
     print(f'FINSIHED AVOIDING MYSELF - POSSIBLE_MOVES {possible_moves}')
     possible_moves = avoid_others(my_head, data, possible_moves)
     print(f'FINSIHED AVOIDING OTHERS - POSSIBLE_MOVES {possible_moves}')
+    possible_moves = avoid_face_to_face_if_weak(data, possible_moves)
+    print(f'FINSIHED AVOIDING IF WEEEAAKK - POSSIBLE_MOVES {possible_moves}')
+
     possible_moves = get_direction(data, possible_moves)
     print(f'FINSIHED GETTING DIRECTIONS - POSSIBLE_MOVES {possible_moves}')
     # TODO: Step 2 - Don't hit yourself.
@@ -188,6 +191,32 @@ def choose_move(data: dict) -> str:
 
     return move
 
+def avoid_face_to_face_if_weak(data: dict, possible_moves: set) -> set:
+  other_snakes = data['board']['snakes']
+  head = data['you']['head']
+  
+  for snake in other_snakes:
+    if snake['length'] < data['you']['length']: continue
+    flat_list = generate_possible_head_moves(snake['head'])
+
+    #print(f'LIST OF OTHER SNAKE{flat_list}')
+    #print(f'ME{head}')
+      
+    for direction in list(possible_moves):
+      if direction == 'up':
+        if {'x': head['x'], 'y': head['y'] + 1} in flat_list:
+          possible_moves.discard('up')
+      elif direction == 'down':
+        if {'x': head['x'], 'y': head['y'] - 1} in flat_list:
+          possible_moves.discard('down')
+      elif direction == 'left':
+        if {'x': head['x'] - 1, 'y': head['y']} in flat_list:
+          possible_moves.discard('left')
+      elif direction == 'right':
+        if {'x': head['x'] + 1, 'y': head['y']} in flat_list:
+          possible_moves.discard('right')
+
+  return possible_moves
 
 def _avoid_my_neck(my_body: dict, possible_moves: set) -> set:
     """
