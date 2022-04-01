@@ -63,7 +63,7 @@ def populate_other_snakes(board: np.array, data: dict):
             else:
                 board[ele['x'] + 1, ele['y'] + 1] = -9
 
-def follow_grad(head: tuple, board: np.array) -> str:
+def follow_grad(head: dict, board: np.array) -> str:
     directions = {
         "up": (0,1),
         "down": (0,-1),
@@ -74,7 +74,7 @@ def follow_grad(head: tuple, board: np.array) -> str:
     max_score = 0
   
     for item in directions.items():
-        curr_score = board[head[0] + item[1][0] + 1, head[1] + item[1][1] + 1]
+        curr_score = board[head['x'] + item[1][0] + 1, head['y'] + item[1][1] + 1]
         if curr_score > max_score:
             direction = item[0]
 
@@ -89,7 +89,7 @@ def choose_move(data: dict) -> str:
     direction = follow_grad(data['you']['head'], array_of_arrays)
 
     # direction = follow_grad(array_of_arrays)
-    # print(f'GOING THIS DIRECTION: {direction}')
+    print(f'GOING THIS DIRECTION: {direction}')
     return direction
 
 
