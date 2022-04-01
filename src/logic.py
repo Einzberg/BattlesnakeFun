@@ -201,6 +201,7 @@ def avoid_face_to_face_if_weak(data: dict, possible_moves: set) -> set:
   head = data['you']['head']
   
   for snake in other_snakes:
+    if snake['name'] == data['you']['name']: continue
     if snake['length'] < data['you']['length']: continue
     flat_list = generate_possible_head_moves(snake['head'])
 
