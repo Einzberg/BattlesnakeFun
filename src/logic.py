@@ -204,8 +204,8 @@ def avoid_face_to_face_if_weak(data: dict, possible_moves: set) -> set:
     if snake['length'] < data['you']['length']: continue
     flat_list = generate_possible_head_moves(snake['head'])
 
-    #print(f'LIST OF OTHER SNAKE{flat_list}')
-    #print(f'ME{head}')
+    print(f'LIST OF OTHER SNAKE{flat_list}')
+    print(f'ME{head}')
       
     for direction in list(possible_moves):
       if direction == 'up':
