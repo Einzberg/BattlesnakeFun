@@ -292,17 +292,19 @@ def avoid_others(head: dict, others: dict, possible_moves:set) -> set:
   for snakes in others['board']['snakes']:
     bodies.append(snakes['body'])
 
+  flat_list = [item for sublist in bodies for item in sublist]
+
   for direction in list(possible_moves):
     if direction == 'up':
-      if {'x': head['x'], 'y': head['y'] + 1} in bodies:
+      if {'x': head['x'], 'y': head['y'] + 1} in flat_list:
         possible_moves.discard('up')
     elif direction == 'down':
-      if {'x': head['x'], 'y': head['y'] - 1} in bodies:
+      if {'x': head['x'], 'y': head['y'] - 1} in flat_list:
         possible_moves.discard('down')
     elif direction == 'left':
-      if {'x': head['x'] - 1, 'y': head['y']} in bodies:
+      if {'x': head['x'] - 1, 'y': head['y']} in flat_list:
         possible_moves.discard('left')
     elif direction == 'right':
-      if {'x': head['x'] + 1, 'y': head['y']} in bodies:
+      if {'x': head['x'] + 1, 'y': head['y']} in flat_list:
         possible_moves.discard('right')
   return possible_moves
