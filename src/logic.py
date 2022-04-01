@@ -209,16 +209,16 @@ def avoid_face_to_face_if_weak(data: dict, possible_moves: set) -> set:
       
     for direction in list(possible_moves):
       if direction == 'up':
-        if {'x': head['x'], 'y': head['y'] + 1} in flat_list:
+        if {head['x'], head['y'] + 1} in flat_list:
           possible_moves.discard('up')
       elif direction == 'down':
-        if {'x': head['x'], 'y': head['y'] - 1} in flat_list:
+        if {head['x'], head['y'] - 1} in flat_list:
           possible_moves.discard('down')
       elif direction == 'left':
-        if {'x': head['x'] - 1, 'y': head['y']} in flat_list:
+        if {head['x'] - 1, head['y']} in flat_list:
           possible_moves.discard('left')
       elif direction == 'right':
-        if {'x': head['x'] + 1, 'y': head['y']} in flat_list:
+        if {head['x'] + 1, head['y']} in flat_list:
           possible_moves.discard('right')
 
   return possible_moves
