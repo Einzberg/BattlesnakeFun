@@ -194,7 +194,7 @@ def choose_move(data: dict) -> str:
 def generate_possible_head_moves(head: dict) -> []:
   x, y = head['x'], head['y']
 
-  return [{x+1, y}, {x-1, y}, {x, y+1}, {x, y-1}]
+  return [{"x": x+1, "y": y}, {"x": x-1, "y": y}, {"x": x, "y": y+1}, {"x": x, "y": y-1}]
 
 def avoid_face_to_face_if_weak(data: dict, possible_moves: set) -> set:
   other_snakes = data['board']['snakes']
@@ -209,16 +209,16 @@ def avoid_face_to_face_if_weak(data: dict, possible_moves: set) -> set:
       
     for direction in list(possible_moves):
       if direction == 'up':
-        if {head['x'], head['y'] + 1} in flat_list:
+        if {'x': head['x'], 'y': head['y'] + 1} in flat_list:
           possible_moves.discard('up')
       elif direction == 'down':
-        if {head['x'], head['y'] - 1} in flat_list:
+        if {'x': head['x'], 'y': head['y'] - 1} in flat_list:
           possible_moves.discard('down')
       elif direction == 'left':
-        if {head['x'] - 1, head['y']} in flat_list:
+        if {'x': head['x'] - 1, 'y': head['y']} in flat_list:
           possible_moves.discard('left')
       elif direction == 'right':
-        if {head['x'] + 1, head['y']} in flat_list:
+        if {'x': head['x'] + 1, 'y': head['y']} in flat_list:
           possible_moves.discard('right')
 
   return possible_moves
