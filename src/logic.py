@@ -191,6 +191,11 @@ def choose_move(data: dict) -> str:
 
     return move
 
+def generate_possible_head_moves(head: dict) -> []:
+  x, y = head['x'], head['y']
+
+  return [{x+1, y}, {x-1, y}, {x, y+1}, {x, y-1}]
+
 def avoid_face_to_face_if_weak(data: dict, possible_moves: set) -> set:
   other_snakes = data['board']['snakes']
   head = data['you']['head']
