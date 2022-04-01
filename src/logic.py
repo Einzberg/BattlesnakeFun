@@ -84,7 +84,7 @@ def get_direction(data, possible_moves) -> set:
     print(f'MOVE: {move}, SCORE: {score}')
 
   for key, score in hash_scores.items():
-    if score == max_score: suggested_moves.add(key)
+    if score > max_score - 10: suggested_moves.add(key)
 
   print(f'FLOOD DIRECTIONS DEEMED OK {suggested_moves}')
   food_moves = food_direction(data)
@@ -122,8 +122,8 @@ def get_flood_fill(move: str, data: dict) -> dict:
       visited[x, y] = 1
     if x+1 < x_max and not visited[x + 1, y]: acc += r_visit(x + 1, y, 0) 
     if y+1 < y_max and not visited[x, y + 1]: acc += r_visit(x, y + 1, 0)
-    if 0 < x-1 and not visited[x - 1, y]: acc += r_visit(x - 1, y, 0)
-    if 0 < y-1 and not visited[x, y - 1]: acc += r_visit(x, y - 1, 0)
+    if 0 <= x-1 and not visited[x - 1, y]: acc += r_visit(x - 1, y, 0)
+    if 0 <= y-1 and not visited[x, y - 1]: acc += r_visit(x, y - 1, 0)
     
     return acc
   
