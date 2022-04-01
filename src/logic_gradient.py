@@ -76,6 +76,7 @@ def follow_grad(head: dict, board: np.array) -> str:
     for item in directions.items():
         curr_score = board[head['x'] + item[1][0] + 1, head['y'] + item[1][1] + 1]
         if curr_score > max_score:
+            max_score = curr_score
             direction = item[0]
 
     return direction
