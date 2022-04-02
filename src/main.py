@@ -4,8 +4,8 @@ import os
 from flask import Flask
 from flask import request
 
-import logic
-# import logic_gradient
+# import logic
+import logic_gradient
 
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ def handle_info():
     See https://docs.battlesnake.com/guides/getting-started#step-4-register-your-battlesnake
     """
     print("INFO")
-    return logic.get_info()
+    return logic_gradient.get_info()
 
 
 @app.post("/start")
@@ -45,7 +45,7 @@ def handle_move():
     data = request.get_json()
 
     # TODO - look at the logic.py file to see how we decide what move to return!
-    move = logic.choose_move(data)
+    move = logic_gradient.choose_move(data)
     print(data["turn"] + 1, "-------------------------------------------")
     return {"move": move}
 
