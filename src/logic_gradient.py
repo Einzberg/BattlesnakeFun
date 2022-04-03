@@ -18,7 +18,7 @@ def get_info() -> dict:
         "tail": "curled",  # TODO: Personalize
     }
 # Globals 
-food_weight = 5
+food_weight = 7
 snake_weight = -9
 snake_head_weight = -2
 wall_weight = -9
@@ -26,7 +26,7 @@ wall_weight = -9
 board_x = None
 board_y = None
 
-def gkern(l=10, scale=10):
+def gkern(l=10, scale=4):
     """\
     creates gaussian kernel with side length `l` and a sigma of `sig`
     """
