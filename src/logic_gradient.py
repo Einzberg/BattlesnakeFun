@@ -1,7 +1,7 @@
 # import random
 # from typing import List, Dict
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 def get_info() -> dict:
     """
@@ -75,7 +75,7 @@ def populate_food(board: np.array, data: dict):
     else:
       kernel = kernel[:, :pad_y]
     board += kernel
-    
+
 def populate_other_snakes(board: np.array, data: dict):
     for snake in data['board']['snakes']:        
         snake_body = snake['body']
@@ -208,12 +208,12 @@ data = {
     }
 }
 
-if True:
+if False:
   board = centre_grad(data)
   board_x, board_y = 11, 11
   populate_other_snakes(board, data)
   populate_food(board, data)
   board = np.pad(board, 1, 'constant', constant_values=snake_weight)
 
-  plt.imshow(np.rot90(np.fliplr(board)), interpolation='none', origin="lower")
-  plt.show()
+  #plt.imshow(np.rot90(np.fliplr(board)), interpolation='none', origin="lower")
+  #plt.show()
