@@ -1,7 +1,7 @@
 # import random
 # from typing import List, Dict
 import numpy as np
-#import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def get_info() -> dict:
     """
@@ -18,10 +18,11 @@ def get_info() -> dict:
         "tail": "curled",  # TODO: Personalize
     }
 # Globals 
-food_weight = 5
+food_weight = 9
 snake_weight = -9
 snake_head_weight = -2
 wall_weight = -9
+board_centre = 1
 
 board_x = None
 board_y = None
@@ -39,13 +40,14 @@ def gkern(l=10, scale=10):
 def centre_grad(data: dict) -> np.array:
   board_w = data["board"]["width"]
   board_h = data["board"]["height"]
-  gradient_board = gkern(max(board_w, board_h))
+  gradient_board = gkern(max(board_w, board_h), board_centre)
 
   return gradient_board
 
 def populate_food(board: np.array, data: dict):
   for food in data['board']['food']:
     food_x, food_y = food['x'], food['y']
+    board[food_x, food_y] = -5
     kern_size = max(11, 11)
     kernel = gkern(kern_size, food_weight)
     mid = kern_size // 2
@@ -64,7 +66,7 @@ def populate_food(board: np.array, data: dict):
       pad_y_tmp = (-pad_y, 0)
 
     pad = (pad_x_tmp, pad_y_tmp)
-    print(food_x, food_y, pad)
+    # print(food_x, food_y, pad)
     kernel = np.pad(kernel, pad, "constant", constant_values=0)
     if pad_x >= 0:
       kernel = kernel[pad_x:,:]
@@ -74,6 +76,9 @@ def populate_food(board: np.array, data: dict):
       kernel = kernel[:, pad_y:]
     else:
       kernel = kernel[:, :pad_y]
+
+    # plt.imshow(np.rot90(np.fliplr(kernel)), interpolation='none', origin="lower")
+    # plt.show()
     board += kernel
 
 def populate_other_snakes(board: np.array, data: dict):
@@ -215,5 +220,5 @@ if False:
   populate_food(board, data)
   board = np.pad(board, 1, 'constant', constant_values=snake_weight)
 
-  #plt.imshow(np.rot90(np.fliplr(board)), interpolation='none', origin="lower")
-  #plt.show()
+  # plt.imshow(np.rot90(np.fliplr(board)), interpolation='none', origin="lower")
+  # plt.show()
