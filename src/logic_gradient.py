@@ -1,7 +1,7 @@
 # import random
 # from typing import List, Dict
 import numpy as np
-#import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def get_info() -> dict:
     """
@@ -18,10 +18,11 @@ def get_info() -> dict:
         "tail": "curled",  # TODO: Personalize
     }
 # Globals 
-food_weight = 7
+food_weight = 9
 snake_weight = -9
 snake_head_weight = -2
 wall_weight = -9
+board_centre = 1
 
 board_x = None
 board_y = None
@@ -39,7 +40,7 @@ def gkern(l=10, scale=4):
 def centre_grad(data: dict) -> np.array:
   board_w = data["board"]["width"]
   board_h = data["board"]["height"]
-  gradient_board = gkern(max(board_w, board_h))
+  gradient_board = gkern(max(board_w, board_h), board_centre)
 
   return gradient_board
 
@@ -195,5 +196,5 @@ if False:
   populate_food(board, data)
   board = np.pad(board, 1, 'constant', constant_values=snake_weight)
 
-  #plt.imshow(np.rot90(np.fliplr(board)), interpolation='none', origin="lower")
-  #plt.show()
+  # plt.imshow(np.rot90(np.fliplr(board)), interpolation='none', origin="lower")
+  # plt.show()
