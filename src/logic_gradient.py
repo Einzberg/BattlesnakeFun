@@ -101,6 +101,7 @@ def choose_move(data: dict) -> str:
 
     populate_other_snakes(board, data)
     board = np.pad(board, 1, 'constant', constant_values=wall_weight)
+    populate_food(board, data)
     direction = follow_grad(data['you']['head'], board)
 
     # direction = follow_grad(array_of_arrays)
