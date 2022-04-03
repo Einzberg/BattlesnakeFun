@@ -86,7 +86,7 @@ def follow_global_max(head: dict, board: np.array) -> str:
   direction = ""
   distance = 10000
   for item in directions.items():
-    curr_dist = (head['x'] + item[1][0] - global_max[0])**2 + (head['y'] + item[1][1] - global_max[1])
+    curr_dist = (head['x'] + item[1][0] - global_max[0])**2 + (head['y'] + item[1][1] - global_max[1])**2
     print(curr_dist, item[0])
     if curr_dist < distance:
       distance = curr_dist
