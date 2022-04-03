@@ -75,6 +75,23 @@ def populate_other_snakes(board: np.array, data: dict):
             else:
                 board[ele['x'], ele['y']] = snake_weight
 
+def follow_global_max(head: dict, board: np.array) -> str: 
+  global_max = np.unravel_index(np.argmax(board), board.shape)
+  directions = {
+    "up": (0,1),
+    "down": (0,-1),
+    "left": (-1,0),
+    "right": (1,0)
+  }
+  direction = ""
+  distance = 10000
+  for item in directions.item():
+    curr_dist = (head['x'] + item[1][0] - global_max[0])**2 + (head['y'] + item[1][1] - global_max[1])
+    if curr_dist < distance:
+      distance = curr_dist
+      direction = item[0]
+  return direction
+
 def follow_grad(head: dict, board: np.array) -> str:
     directions = {
         "up": (0,1),
@@ -103,7 +120,7 @@ def choose_move(data: dict) -> str:
     populate_other_snakes(board, data)
     board = np.pad(board, 1, 'constant', constant_values=wall_weight)
     populate_food(board, data)
-    direction = follow_grad(data['you']['head'], board)
+    direction = follow_global_max(data['you']['head'], board)
 
     # direction = follow_grad(array_of_arrays)
     print(f'GOING THIS DIRECTION: {direction}')
