@@ -46,35 +46,14 @@ def centre_grad(data: dict) -> np.array:
 def populate_food(board: np.array, data: dict):
   for food in data['board']['food']:
     food_x, food_y = food['x'], food['y']
-    kern_size = max(11, 11)
-    kernel = gkern(kern_size, food_weight)
-    mid = kern_size // 2
-    pad_x  = mid - food_x
-    pad_y = mid - food_y
-    pad_x_tmp = None
-    pad_y_tmp = None
-    if pad_x > 0: 
-      pad_x_tmp = (0, pad_x)
-    else: 
-      pad_x_tmp = (-pad_x, 0)
-      
-    if pad_y > 0: 
-      pad_y_tmp = (0 , pad_y)
-    else: 
-      pad_y_tmp = (-pad_y, 0)
-
-    pad = (pad_x_tmp, pad_y_tmp)
-    print(food_x, food_y, pad)
-    kernel = np.pad(kernel, pad, "constant", constant_values=0)
-    if pad_x >= 0:
-      kernel = kernel[pad_x:,:]
-    else:
-      kernel = kernel[0:pad_x,:]
-    if pad_y >= 0:
-      kernel = kernel[:, pad_y:]
-    else:
-      kernel = kernel[:, :pad_y]
-    board += kernel
+    kern_size = max(board.shape[0], board.shape[1])
+    kernel = gkern(kern_size*2 + 1, 1)
+    mid = kern_size + 1
+    x_min = mid - food_x
+    x_max = mid + board.shape[0] - food_x
+    y_min = mid - food_y
+    y_max = mid + board.shape[0] - food_y
+    board += kernel[x_min:x_max, y_min:y_max]*food_weight
 
 def populate_other_snakes(board: np.array, data: dict):
     for snake in data['board']['snakes']:        
