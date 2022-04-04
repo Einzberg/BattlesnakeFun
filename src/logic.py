@@ -73,8 +73,8 @@ def food_direction(data: dict) -> set:
   return dirs
   
 # Sample Move Request: https://docs.battlesnake.com/references/api/sample-move-request
-def get_direction(data, possible_moves) -> set:
-  suggested_moves = set()
+def get_direction(data, possible_moves) -> []:
+  suggested_moves = []
   hash_scores = {}
   max_score = 0
   for move in possible_moves:
@@ -84,14 +84,17 @@ def get_direction(data, possible_moves) -> set:
     print(f'MOVE: {move}, SCORE: {score}')
 
   for key, score in hash_scores.items():
-    if score > max_score - 10: suggested_moves.add(key)
+    if score == max_score: suggested_moves.append(key)
+
+  for key, score in hash_scores.items():
+    if score > max_score - 10 and score != max_score: suggested_moves.append(key)
 
   print(f'FLOOD DIRECTIONS DEEMED OK {suggested_moves}')
   food_moves = food_direction(data)
   print(f'FOOD DIRECTIONS DEEMED OK {food_moves}')
   if food_moves:
-    if suggested_moves.intersection(food_moves):
-      return suggested_moves.intersection(food_moves)
+    if sorted(set(suggested_moves).intersection(food_moves) ,key=lambda x:suggested_moves.index(x)):
+      return sorted(set(suggested_moves).intersection(food_moves) ,key=lambda x:suggested_moves.index(x))
     else:
       return suggested_moves
   else:
@@ -181,7 +184,8 @@ def choose_move(data: dict) -> str:
     # food = data['board']['food']
 
     # Choose a random direction from the remaining possible_moves to move in, and then return that move
-    move = random.choice(list(possible_moves))
+    # move = random.choice(list(possible_moves))
+    move = possible_moves[0]
     # last_move = move
     # TODO: Explore new strategies for picking a move that are better than random
 
