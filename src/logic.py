@@ -77,6 +77,12 @@ def get_direction(data, possible_moves) -> []:
   suggested_moves = []
   hash_scores = {}
   max_score = 0
+  arbitrary_heuristic = 10
+  if data['you']['length'] >= 10: 
+    arbitrary_heuristic = 5
+  elif data['you']['length'] >= 15: 
+    arbitrary_heuristic = 0
+    
   for move in possible_moves:
     score = get_flood_fill(move, data)
     if score > max_score: max_score = score
@@ -87,7 +93,7 @@ def get_direction(data, possible_moves) -> []:
     if score == max_score: suggested_moves.append(key)
 
   for key, score in hash_scores.items():
-    if score > max_score - 10 and score != max_score: suggested_moves.append(key)
+    if score > max_score - arbitrary_heuristic and score != max_score: suggested_moves.append(key)
 
   print(f'FLOOD DIRECTIONS DEEMED OK {suggested_moves}')
   food_moves = food_direction(data)
@@ -110,16 +116,21 @@ def get_flood_fill(move: str, data: dict) -> dict:
   head = data["you"]["head"]
   y_max = data['board']['height']
   x_max = data['board']['width']
-  
+
+  for snake in data['board']['snakes']:
+    if snake['length'] > data['you']['length']:
+      x, y = snake['head']['x'], snake['head']['y']    
+      if x+1 < x_max: visited[x+1][y] = 1
+      if y+1 < y_max: visited[x][y + 1] = 1
+      if 0 <= x-1: visited[x-1][y] = 1
+      if 0 <= y-1: visited[x][y-1] = 1
+
   dir = {"up": (0,1),
          "down": (0,-1),
          "left": (-1,0),
          "right": (1,0)}
 
   def r_visit(x: int, y: int, acc: int) -> int:
-    
-
-    
     if visited[x, y] != 1:
       acc += 1
       visited[x, y] = 1
@@ -145,7 +156,6 @@ def choose_move(data: dict) -> str:
     for each move of the game.
 
     """
-    last_move = "idk"
     my_snake = data["you"]      # A dictionary describing your snake's position on the board
     my_head = my_snake["head"]  # A dictionary of coordinates like {"x": 0, "y": 0}
     my_body = my_snake["body"]  # A list of coordinate dictionaries like [{"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0}]
@@ -167,12 +177,13 @@ def choose_move(data: dict) -> str:
     possible_moves = avoid_myself(my_body, possible_moves)
     print(f'FINSIHED AVOIDING MYSELF - POSSIBLE_MOVES {possible_moves}')
     possible_moves = avoid_others(my_head, data, possible_moves)
+    backup_moves = possible_moves.copy()
     print(f'FINSIHED AVOIDING OTHERS - POSSIBLE_MOVES {possible_moves}')
-    possible_moves = avoid_face_to_face_if_weak(data, possible_moves)
-    print(f'FINSIHED AVOIDING IF WEEEAAKK - POSSIBLE_MOVES {possible_moves}')
+    possible_final_moves = avoid_face_to_face_if_weak(data, possible_moves)
+    print(f'FINSIHED AVOIDING IF WEEEAAKK - POSSIBLE_MOVES {possible_final_moves}')
 
-    possible_moves = get_direction(data, possible_moves)
-    print(f'FINSIHED GETTING DIRECTIONS - POSSIBLE_MOVES {possible_moves}')
+    possible_final_moves = get_direction(data, possible_final_moves)
+    print(f'FINSIHED GETTING DIRECTIONS - POSSIBLE_MOVES {possible_final_moves}')
     # TODO: Step 2 - Don't hit yourself.
     # Use information from `my_body` to avoid moves that would collide with yourself.
 
@@ -185,11 +196,16 @@ def choose_move(data: dict) -> str:
 
     # Choose a random direction from the remaining possible_moves to move in, and then return that move
     # move = random.choice(list(possible_moves))
-    move = possible_moves[0]
-    # last_move = move
+    move = "idk"
+    if possible_final_moves:
+      move = possible_final_moves[0]
+    else:
+      move = random.choice(list(backup_moves))
+          
+
     # TODO: Explore new strategies for picking a move that are better than random
 
-    print(f"{data['game']['id']} MOVE {data['turn']}: {move} picked from all valid options in {possible_moves}")
+    print(f"{data['game']['id']} MOVE {data['turn']}: {move} picked from all valid options in {possible_final_moves}")
     print(f"HEAD AT: {my_head}")
     # print(last_move)
 
@@ -295,7 +311,7 @@ def avoid_myself(my_body: dict, possible_moves: set) -> set:
 def avoid_others(head: dict, others: dict, possible_moves:set) -> set:
   bodies = []
   for snakes in others['board']['snakes']:
-    bodies.append(snakes['body'])
+    bodies.append(snakes['body'][:-1])
 
   flat_list = [item for sublist in bodies for item in sublist]
 
